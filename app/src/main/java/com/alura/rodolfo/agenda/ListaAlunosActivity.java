@@ -90,27 +90,27 @@ public class ListaAlunosActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(ListaAlunosActivity.this,
                             new String[]{Manifest.permission.CALL_PHONE}, 123);
                 } else {
-                    Intent intentLigar = new Intent(Intent.ACTION_CALL);
-                    intentLigar.setData(Uri.parse("tel" + aluno.getTelefone()));
+                    Uri uri = Uri.parse("tel:"+ aluno.getTelefone());
+                    Intent intentLigar = new Intent(Intent.ACTION_CALL,uri);
                     startActivity(intentLigar);
                 }
                 return false;
             }
         });
 
-        //sms
+        //SMS
         MenuItem itemSMS = menu.add("Enviar SMS");
         Intent intentSMS = new Intent(Intent.ACTION_VIEW);
-        intentSMS.setData(Uri.parse("SMS:" + aluno.getTelefone()));
+        intentSMS.setData(Uri.parse("sms:" + aluno.getTelefone()));
         itemSMS.setIntent(intentSMS);
 
-        //mapa
+        //MAP
         MenuItem itemMapa = menu.add("Visualizar no mapa");
         Intent intentMapa = new Intent(Intent.ACTION_VIEW);
         intentMapa.setData(Uri.parse("geo:0,0?q=" + aluno.getEndereco()));
         itemMapa.setIntent(intentMapa);
 
-        //site
+        //Site
         MenuItem itemSite = menu.add("Visitar Site");
         Intent intentSite = new Intent(Intent.ACTION_VIEW);
         String site = aluno.getSite();
