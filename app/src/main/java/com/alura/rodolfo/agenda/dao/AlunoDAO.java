@@ -17,32 +17,36 @@ import java.util.List;
  */
 public class AlunoDAO extends SQLiteOpenHelper {
     public AlunoDAO(Context context) {
-        super(context, "Agenda", null, 1);
+        super(context, "Agenda", null, 2);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE Alunos (id INTEGER PRIMARY KEY, nome TEXT NOT NULL, " +
-                "endereco TEXT, telefone TEXT, email TEXT, site TEXT, nota REAL);";
-        db.execSQL(sql);
-
+        String sql = "CREATE TABLE Alunos (id INTEGER PRIMARY KEY," +
+                " nome TEXT NOT NULL, " +
+                "endereco TEXT," +
+                " telefone TEXT, " +
+                "email TEXT, " +
+                "site TEXT, " +
+                "nota REAL, "+
+                "caminhoFoto TEXT);";
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE IF EXISTS Alunos";
-        db.execSQL(sql);
-        onCreate(db);
-
+        String sql = "";
+        switch (oldVersion) {
+            case 1:
+                sql= "ALTER TABLE Alunos ADD COLUMN caminhoFoto TEXT";
+                db.execSQL(sql);
+                break;
+        }
     }
 
     public void insere(Aluno aluno) {
         SQLiteDatabase db = getWritableDatabase();
-
         ContentValues dados = pegaDadosAluno(aluno);
-
         db.insert("Alunos", null, dados);
-
     }
 
     @NonNull
@@ -54,6 +58,7 @@ public class AlunoDAO extends SQLiteOpenHelper {
         dados.put("site", aluno.getSite());
         dados.put("endereco", aluno.getEndereco());
         dados.put("nota", aluno.getNota());
+        dados.put("caminhoFoto", aluno.getCaminhoFoto());
         return dados;
     }
 
@@ -71,17 +76,17 @@ public class AlunoDAO extends SQLiteOpenHelper {
             aluno.setNota(c.getDouble(c.getColumnIndex("nota")));
             aluno.setTelefone(c.getString(c.getColumnIndex("telefone")));
             aluno.setEmail(c.getString(c.getColumnIndex("email")));
+            aluno.setCaminhoFoto(c.getString(c.getColumnIndex("caminhoFoto")));
 
             alunos.add(aluno);
-
         }
         c.close();
+
         return alunos;
     }
 
     public void deleta(Aluno aluno) {
         SQLiteDatabase db = getWritableDatabase();
-
         String[]
                 params = new String[]{aluno.getId().toString()};
         db.delete("Alunos", "id = ?", params);
@@ -90,12 +95,8 @@ public class AlunoDAO extends SQLiteOpenHelper {
 
     public void altera(Aluno aluno) {
         SQLiteDatabase db = getWritableDatabase();
-
         ContentValues dados = pegaDadosAluno(aluno);
         String[] params = new String[]{aluno.getId().toString()};
         db.update("Alunos", dados, "id = ?", params);
-
-
     }
-
 }

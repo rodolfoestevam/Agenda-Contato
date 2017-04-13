@@ -1,19 +1,31 @@
 package com.alura.rodolfo.agenda;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.alura.rodolfo.agenda.dao.AlunoDAO;
 import com.alura.rodolfo.agenda.modelo.Aluno;
 
+import java.io.File;
+
 public class FormularioActivity extends AppCompatActivity {
 
+    public static final int CODIGO_CAMERA = 567;
     private FormularioHelper helper;
+    private String caminhoFoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +39,29 @@ public class FormularioActivity extends AppCompatActivity {
 
         if (aluno != null) {
             helper.preencheFormulario(aluno);
+        }
+
+        Button botaoFoto = (Button) findViewById(R.id.formulario_botao_foto);
+        botaoFoto.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                caminhoFoto = getExternalFilesDir(null) + "/" + System.currentTimeMillis() + "jpg";
+                File arquivoFoto = new File(caminhoFoto);
+                intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(arquivoFoto));
+                startActivityForResult(intentCamera, CODIGO_CAMERA);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,
+                                    int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CODIGO_CAMERA) {
+                helper.carregaImagem(caminhoFoto);
+            }
         }
     }
 
@@ -43,6 +78,7 @@ public class FormularioActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_formulario_ok:
                 Aluno aluno = helper.pegaAluno();
+
                 AlunoDAO dao = new AlunoDAO(this);
 
                 if (aluno.getId() != null) {
