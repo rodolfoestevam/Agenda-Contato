@@ -66,7 +66,6 @@ public class ListaAlunosActivity extends AppCompatActivity {
         dao.close();
         //carrega a lista
         AlunosAdapter adapter = new AlunosAdapter(this, alunos);
-
         listaAlunos.setAdapter(adapter);
     }
 
