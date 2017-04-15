@@ -53,6 +53,7 @@ public class AlunosAdapter extends BaseAdapter {
 
         LayoutInflater inflater = LayoutInflater.from(context);
 
+
         View view = convertView;
         if (view == null) {
             view = inflater.inflate(R.layout.list_item, parent, false);
