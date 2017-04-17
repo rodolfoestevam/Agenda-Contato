@@ -52,8 +52,6 @@ public class AlunosAdapter extends BaseAdapter {
         Aluno aluno = alunos.get(position);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-
-
         View view = convertView;
         if (view == null) {
             view = inflater.inflate(R.layout.list_item, parent, false);
