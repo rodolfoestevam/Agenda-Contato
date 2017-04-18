@@ -1,0 +1,24 @@
+{
+  "list": [
+    {
+      "aluno": [
+        {
+          "id": "1",
+          "nome": "Daniel",
+          "endereco": "Rua Vergueiro",
+          "telefone": "111222333",
+          "site": "www.alura.com.br",
+          "nota": "4.5"
+        },
+        {
+        "id": "2",
+        "nome": "Edna",
+        "endereco": "Rua Pastor José Amaro da Silva",
+        "telefone": "34285129",
+        "site": "www.alura.com.br",
+        "nota": "5.0"
+        }
+      ]
+    }
+  ]
+}
