@@ -4,9 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.alura.rodolfo.agenda.modelo.Aluno;
 
@@ -17,29 +17,31 @@ import java.util.List;
  * Created by Rodolfo on 09/01/17.
  */
 public class AlunoDAO extends SQLiteOpenHelper {
+    private static final String ALUNOS_TABELA = "alunos";
+
     public AlunoDAO(Context context) {
-        super(context, "Agenda", null, 2);
+        super(context, "Agenda", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE Alunos (id INTEGER PRIMARY KEY," +
-                " nome TEXT NOT NULL, " +
-                "endereco TEXT," +
-                " telefone TEXT, " +
+        Log.i("AlunoDAO", "Table created");
+        db.execSQL("CREATE TABLE " + ALUNOS_TABELA + " " +
+                "(id INTEGER PRIMARY KEY, " +
+                "nome TEXT NOT NULL, " +
+                "endereco TEXT, " +
+                "telefone TEXT, " +
                 "email TEXT, " +
                 "site TEXT, " +
-                "nota REAL, "+
-                "caminhoFoto TEXT);";
+                "nota REAL, " +
+                "caminhoFoto TEXT)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "";
         switch (oldVersion) {
             case 1:
-                sql= "ALTER TABLE Alunos ADD COLUMN caminhoFoto TEXT";
-                db.execSQL(sql);
+                db.execSQL("ALTER TABLE " + ALUNOS_TABELA + " ADD COLUMN caminhoFoto TEXT");
                 break;
         }
     }
@@ -47,7 +49,7 @@ public class AlunoDAO extends SQLiteOpenHelper {
     public void insere(Aluno aluno) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues dados = pegaDadosAluno(aluno);
-        db.insert("Alunos", null, dados);
+        db.insert(ALUNOS_TABELA, null, dados);
     }
 
     @NonNull
@@ -65,7 +67,7 @@ public class AlunoDAO extends SQLiteOpenHelper {
 
     public List<Aluno> buscaAlunos() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM Alunos;", null);
+        Cursor c = db.rawQuery("SELECT * FROM " + ALUNOS_TABELA, null);
 
         List<Aluno> alunos = new ArrayList<>();
         while (c.moveToNext()) {
@@ -90,7 +92,7 @@ public class AlunoDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         String[]
                 params = new String[]{aluno.getId().toString()};
-        db.delete("Alunos", "id = ?", params);
+        db.delete(ALUNOS_TABELA, "id = ?", params);
 
     }
 
@@ -98,12 +100,12 @@ public class AlunoDAO extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues dados = pegaDadosAluno(aluno);
         String[] params = new String[]{aluno.getId().toString()};
-        db.update("Alunos", dados, "id = ?", params);
+        db.update(ALUNOS_TABELA, dados, "id = ?", params);
     }
 
     public boolean isAluno(String telefone) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM Alunos WHERE telefone = ?", new String[]{telefone});
+        Cursor c = db.rawQuery("SELECT * FROM " + ALUNOS_TABELA + " WHERE telefone = ?", new String[]{telefone});
         int resultados = c.getCount();
         c.close();
         return resultados > 0;

@@ -4,16 +4,16 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.view.MenuItem;
 
 import com.alura.rodolfo.agenda.adapter.AlunosAdapter;
 import com.alura.rodolfo.agenda.dao.AlunoDAO;
@@ -38,7 +38,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Aluno aluno = (Aluno) listaAlunos.getItemAtPosition(position);
 
-                Intent intentVaiProFormulario= new Intent(ListaAlunosActivity.this, FormularioActivity.class);
+                Intent intentVaiProFormulario = new Intent(ListaAlunosActivity.this, FormularioActivity.class);
                 intentVaiProFormulario.putExtra("aluno", aluno);
                 startActivity(intentVaiProFormulario);
             }
@@ -56,7 +56,6 @@ public class ListaAlunosActivity extends AppCompatActivity {
         registerForContextMenu(listaAlunos);
 
     }
-
 
 
     private void carregaLista() {
@@ -107,8 +106,8 @@ public class ListaAlunosActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(ListaAlunosActivity.this,
                             new String[]{Manifest.permission.CALL_PHONE}, 123);
                 } else {
-                    Uri uri = Uri.parse("tel:"+ aluno.getTelefone());
-                    Intent intentLigar = new Intent(Intent.ACTION_CALL,uri);
+                    Uri uri = Uri.parse("tel:" + aluno.getTelefone());
+                    Intent intentLigar = new Intent(Intent.ACTION_CALL, uri);
                     startActivity(intentLigar);
                 }
                 return false;

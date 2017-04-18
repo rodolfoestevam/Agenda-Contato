@@ -40,8 +40,7 @@ public class EnviaAlunoTask extends AsyncTask <Void, Void, String> {
 
         WebClient client = new WebClient();
 
-        String resposta =  client.post(json);
-        return resposta;
+        return client.post(json);
     }
 
     @Override
