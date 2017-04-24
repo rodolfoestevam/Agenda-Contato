@@ -46,6 +46,6 @@ public class EnviaAlunoTask extends AsyncTask <Void, Void, String> {
     @Override
     protected void onPostExecute(String resposta) {
         dialog.dismiss();
-        Toast.makeText(context,resposta, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context,resposta, Toast.LENGTH_LONG).show();
     }
 }
