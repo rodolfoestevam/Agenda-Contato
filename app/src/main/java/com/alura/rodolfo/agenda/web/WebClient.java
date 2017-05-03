@@ -1,4 +1,4 @@
-package com.alura.rodolfo.agenda;
+package com.alura.rodolfo.agenda.web;
 
 import java.io.IOException;
 import java.io.PrintStream;

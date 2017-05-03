@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import com.alura.rodolfo.agenda.adapter.AlunosAdapter;
 import com.alura.rodolfo.agenda.dao.AlunoDAO;
 import com.alura.rodolfo.agenda.modelo.Aluno;
+import com.alura.rodolfo.agenda.tasks.EnviaAlunoTask;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class ListaAlunosActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Aluno aluno = (Aluno) listaAlunos.getItemAtPosition(position);
 
-                Intent intentVaiProFormulario= new Intent(ListaAlunosActivity.this, FormularioActivity.class);
+                Intent intentVaiProFormulario = new Intent(ListaAlunosActivity.this, FormularioActivity.class);
                 intentVaiProFormulario.putExtra("aluno", aluno);
                 startActivity(intentVaiProFormulario);
             }
@@ -56,7 +57,6 @@ public class ListaAlunosActivity extends AppCompatActivity {
         registerForContextMenu(listaAlunos);
 
     }
-
 
 
     private void carregaLista() {
@@ -89,6 +89,11 @@ public class ListaAlunosActivity extends AppCompatActivity {
             case R.id.menu_enviar_notas:
                 new EnviaAlunoTask(this).execute();
                 break;
+
+            case R.id.menu_baixar_provas:
+                Intent vaiParaProvas = new Intent(this, ProvasActivity.class);
+                startActivity(vaiParaProvas);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -107,8 +112,8 @@ public class ListaAlunosActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(ListaAlunosActivity.this,
                             new String[]{Manifest.permission.CALL_PHONE}, 123);
                 } else {
-                    Uri uri = Uri.parse("tel:"+ aluno.getTelefone());
-                    Intent intentLigar = new Intent(Intent.ACTION_CALL,uri);
+                    Uri uri = Uri.parse("tel:" + aluno.getTelefone());
+                    Intent intentLigar = new Intent(Intent.ACTION_CALL, uri);
                     startActivity(intentLigar);
                 }
                 return false;
