@@ -1,5 +1,6 @@
 package com.alura.rodolfo.agenda.web;
 
+import android.support.annotation.Nullable;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.HttpURLConnection;
@@ -12,30 +13,39 @@ import java.util.Scanner;
  */
 
 public class WebClient {
-    public String post(String json){
 
-        try {
-            URL url = new URL("https://www.caelum.com.br/mobile");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty("content-type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
+  public String post(String json) {
+    String endereco = "https://www.caelum.com.br/mobile";
 
-            connection.setDoOutput(true);
+    return realizaRequisicao(json, endereco);
+  }
 
-            PrintStream output = new PrintStream(connection.getOutputStream());
-            output.println(json);
+  @Nullable
+  private String realizaRequisicao(String json, String endereco) {
+    try {
+      URL url = new URL(endereco);
+      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      connection.setRequestProperty("content-type", "application/json");
+      connection.setRequestProperty("Accept", "application/json");
 
-            connection.connect();
+      connection.setDoOutput(true);
 
-            Scanner scanner = new Scanner(connection.getInputStream());
+      PrintStream output = new PrintStream(connection.getOutputStream());
+      output.println(json);
 
-            String resposta = scanner.next();
-            return resposta;
-        } catch (MalformedInputException e) {
-            e.printStackTrace();;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+      connection.connect();
+
+      Scanner scanner = new Scanner(connection.getInputStream());
+
+      String resposta = scanner.next();
+      return resposta;
+    } catch (MalformedInputException e) {
+      e.printStackTrace();
+
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+    return null;
+  }
+
 }
